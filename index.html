@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wissenstest</title>
+
+<style>
+* {
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:-apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* HEADER */
+.header {
+    width:100%;
+    height:140px;
+}
+.header img {
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+/* CONTENT */
+.content {
+    background:#f2f2f2;
+    padding:15px;
+    min-height:100vh;
+}
+
+/* CARDS */
+.card {
+    display:flex;
+    align-items:center;
+    background:white;
+    border-radius:20px;
+    padding:15px;
+    margin-top:15px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.05);
+}
+
+.card img {
+    width:70px;
+    height:70px;
+    border-radius:16px;
+    margin-right:15px;
+    object-fit:cover;
+}
+
+/* QUIZ BOX */
+.quiz-box {
+    background:white;
+    border-radius:20px;
+    padding:20px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.05);
+}
+
+/* BUTTONS */
+.btn {
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:14px;
+    margin-top:10px;
+    font-size:18px;
+    font-weight:600;
+}
+
+.btn-back { background:#555; color:white; }
+.btn-next { background:linear-gradient(90deg,#ff3b3b,#ff9800); color:white; }
+
+/* ANSWERS */
+.answer {
+    background:#eee;
+    padding:14px;
+    border-radius:12px;
+    margin:6px 0;
+}
+
+.correct { background:#4caf50 !important; color:white; }
+.wrong { background:#f44336 !important; color:white; }
+.selected { border:2px solid #ff3b3b; }
+
+/* QUIZ IMAGE */
+.quiz-img {
+    width:140px;
+    display:block;
+    margin:15px auto;
+}
+</style>
+</head>
+
+<body>
+
+<div id="app">Lade...</div>
+
+<script>
+
+let alleFragen=[], dienstgrade=[], armaturen=[], armaturenBilder=[];
+
+async function loadSafe(file){
+    try {
+        return await (await fetch(file)).json();
+    } catch(e){
+        console.log("Fehlt:", file);
+        return [];
+    }
+}
+
+async function start(){
+    alleFragen = await loadSafe("fragen.json");
+    dienstgrade = await loadSafe("dienstgrade.json");
+    armaturen = await loadSafe("armaturen.json");
+    armaturenBilder = await loadSafe("armaturen_bilder.json");
+
+    document.getElementById("app").innerHTML = `
+    
+    <div class="header">
+        <img src="banner.png">
+    </div>
+
+    <div class="content">
+
+        <div class="card" onclick="startDienstgrade()">
+            <img src="dienstgrade.png">
+            <div><b>Dienstgrade</b><br>${dienstgrade.length} Fragen</div>
+        </div>
+
+        <div class="card" onclick="startTheorie()">
+            <img src="theorie.png">
+            <div><b>Theorie</b><br>${alleFragen.length} Fragen</div>
+        </div>
+
+        <div class="card" onclick="startArmaturen()">
+            <img src="armaturen.png">
+            <div><b>Armaturen Theorie</b><br>${armaturen.length} Fragen</div>
+        </div>
+
+        <div class="card" onclick="startArmaturenBilder()">
+            <img src="armatur_erkennen.png">
+            <div><b>Armaturen erkennen</b><br>${armaturenBilder.length} Fragen</div>
+        </div>
+
+    </div>`;
+}
+
+/* ================= QUIZ ================= */
+
+let modus="", fragen=[], index=0, punkte=0;
+let auswahl=[], beantwortet=false, currentAnswers=[];
+
+function shuffle(a){ return a.sort(()=>Math.random()-0.5); }
+
+function startTheorie(){ modus="theorie"; fragen=shuffle([...alleFragen]); reset(); showQuiz(); }
+function startArmaturen(){ modus="armaturen"; fragen=shuffle([...armaturen]); reset(); showQuiz(); }
+
+function reset(){ index=0; punkte=0; }
+
+function showQuiz(){
+    auswahl=[]; beantwortet=false;
+    let f=fragen[index];
+
+    currentAnswers = f.antworten.map((a,i)=>({text:a,index:i}))
+        .sort(()=>Math.random()-0.5);
+
+    document.getElementById("app").innerHTML=`
+    <div class="content">
+    <div class="quiz-box">
+
+        <button class="btn btn-back" onclick="start()">Zur Startseite</button>
+
+        <h3>${index+1}/${fragen.length}</h3>
+        <h3>${f.frage}</h3>
+
+        ${currentAnswers.map((a,i)=>`
+            <div class="answer" onclick="toggle(${i},this)">
+                ${a.text}
+            </div>
+        `).join("")}
+
+        <button class="btn btn-next" id="ok" onclick="checkQuiz()" disabled>Bestätigen</button>
+        <button class="btn btn-next" id="next" onclick="next()" style="display:none;">Weiter</button>
+
+    </div>
+    </div>`;
+}
+
+function toggle(i,el){
+    if(beantwortet) return;
+
+    if(auswahl.includes(i)){
+        auswahl=auswahl.filter(x=>x!==i);
+        el.classList.remove("selected");
+    } else {
+        auswahl.push(i);
+        el.classList.add("selected");
+    }
+
+    document.getElementById("ok").disabled = auswahl.length===0;
+}
+
+function checkQuiz(){
+    beantwortet=true;
+    let f=fragen[index];
+
+    document.querySelectorAll(".answer").forEach((el,i)=>{
+        let orig=currentAnswers[i].index;
+
+        if(f.richtig.includes(orig)) el.classList.add("correct");
+        if(auswahl.includes(i) && !f.richtig.includes(orig)){
+            el.classList.add("wrong");
+        }
+
+        el.style.pointerEvents="none";
+    });
+
+    if(auswahl.length===f.richtig.length &&
+       auswahl.every(i=>f.richtig.includes(currentAnswers[i].index))){
+        punkte++;
+    }
+
+    let box=document.createElement("div");
+    box.className="quiz-box";
+    box.style.marginTop="10px";
+    box.innerHTML=`<h4>Erklärung</h4><p>${f.erklaerung}</p>`;
+    document.querySelector(".content").appendChild(box);
+
+    document.getElementById("ok").style.display="none";
+    document.getElementById("next").style.display="block";
+}
+
+/* ================= BILDER ================= */
+
+function startDienstgrade(){ modus="dienst"; fragen=shuffle([...dienstgrade]); reset(); showBild(); }
+function startArmaturenBilder(){ modus="bild"; fragen=shuffle([...armaturenBilder]); reset(); showBild(); }
+
+function showBild(){
+    auswahl=[]; beantwortet=false;
+
+    let f=fragen[index];
+    let antworten = shuffle(fragen.map(x=>x.name)).slice(0,4);
+
+    if(!antworten.includes(f.name)){
+        antworten[0]=f.name;
+        antworten=shuffle(antworten);
+    }
+
+    currentAnswers=antworten;
+
+    document.getElementById("app").innerHTML=`
+    <div class="content">
+    <div class="quiz-box">
+
+        <button class="btn btn-back" onclick="start()">Zur Startseite</button>
+
+        <h3>${index+1}/${fragen.length}</h3>
+        <h3>${modus==="dienst" ? "Welcher Dienstgrad ist das?" : "Welche Armatur ist das?"}</h3>
+
+        <img src="${f.bild}" class="quiz-img">
+
+        ${antworten.map((a,i)=>`
+            <div class="answer" onclick="toggleBild(${i},this)">
+                ${a}
+            </div>
+        `).join("")}
+
+        <button class="btn btn-next" id="ok" onclick="checkBild()" disabled>Bestätigen</button>
+        <button class="btn btn-next" id="next" onclick="next()" style="display:none;">Weiter</button>
+
+    </div>
+    </div>`;
+}
+
+function toggleBild(i,el){
+    if(beantwortet) return;
+
+    document.querySelectorAll(".answer").forEach(a=>a.classList.remove("selected"));
+    auswahl=[i];
+    el.classList.add("selected");
+
+    document.getElementById("ok").disabled=false;
+}
+
+function checkBild(){
+    beantwortet=true;
+    let f=fragen[index];
+
+    document.querySelectorAll(".answer").forEach((el,i)=>{
+        if(currentAnswers[i]===f.name) el.classList.add("correct");
+        if(auswahl.includes(i) && currentAnswers[i]!==f.name){
+            el.classList.add("wrong");
+        }
+    });
+
+    if(currentAnswers[auswahl[0]]===f.name) punkte++;
+
+    let box=document.createElement("div");
+    box.className="quiz-box";
+    box.style.marginTop="10px";
+    box.innerHTML=`<h4>Erklärung</h4><p>${f.erklaerung}</p>`;
+    document.querySelector(".content").appendChild(box);
+
+    document.getElementById("ok").style.display="none";
+    document.getElementById("next").style.display="block";
+}
+
+/* ================= NEXT ================= */
+
+function next(){
+    index++;
+    if(index>=fragen.length){
+        document.getElementById("app").innerHTML=`
+        <div class="content">
+        <div class="quiz-box">
+            <h2>Ergebnis</h2>
+            <p>${punkte} / ${fragen.length}</p>
+            <button class="btn btn-next" onclick="start()">Zur Startseite</button>
+        </div>
+        </div>`;
+    } else {
+        if(modus==="theorie" || modus==="armaturen") showQuiz();
+        else showBild();
+    }
+}
+
+start();
+
+</script>
+
+</body>
+</html>

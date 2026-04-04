@@ -1,0 +1,42 @@
+[
+  {
+    "name": "ABC-Kupplungsschlüssel",
+    "bild": "abc_schluessel.png",
+    "erklaerung": "Kupplungsschlüssel werden immer dann zum Kuppeln und Nachziehen verwendet, wenn dies von Hand nicht mehr möglich ist."
+  },
+  {
+    "name": "Hydrantenschlüssel",
+    "bild": "hydrantenschluessel.png",
+    "erklaerung": "Hydrantenschlüssel gibt es in zwei Ausführungen, nämlich für den Ober- und den Unterflurhydranten. Mit dem Oberflurhydrantenschlüssel kann man mit dem Haken den Hydranten öffnen und der große Dreikant dient zum Öffnen der Blindkupplung."
+  },
+  {
+    "name": "Mehrzweckstrahlrohr",
+    "bild": "strahlrohr.png",
+    "erklaerung": "Ein Mehrzweckstrahlrohr benötigt man zur Löschwasserabgabe. Dadurch ist ein gezieltes Löschen möglich. Durch Abschrauben des Mundstückes lässt sich die Durchflussmenge verdoppeln. Beim C-Mehrzweckstrahlrohr von 100 l auf 200 l und beim B-Mehrzweckstrahlrohr von 400 l auf 800 l pro Minute."
+  },
+  {
+    "name": "Verteiler",
+    "bild": "verteiler.png",
+    "erklaerung": "Der Verteiler hat die Aufgabe, das ankommende Löschwasser aus der Zubringerleitung in drei Löschleitungen zu verteilen. Er verfügt dabei über einen B-Eingang, zwei C- und einen B-Ausgang. Am linken Druckausgang schließt der Angriffstrupp das erste Rohr an, am rechten Ausgang wird das zweite Rohr vom Wassertrupp und in der Mitte das dritte Rohr oder Sonderrohr vom Schlauchtrupp angeschlossen."
+  },
+  {
+    "name": "Saugkopf",
+    "bild": "saugkopf.png",
+    "erklaerung": "Der Saugkopf dient zur Wasserentnahme. Er verhindert einerseits durch das Schmutzsieb das Eindringen größerer Schmutzteile in die Saugleitung und andererseits das Abreißen der Wassersäule bei 'Wasser halt' durch das Rückschlagventil."
+  },
+  {
+    "name": "Übergangsstück",
+    "bild": "uebergang.png",
+    "erklaerung": "Übergangsstücke dienen zur Verbindung von Kupplungen verschiedener Größen. Es gibt sie in den Größen A125-A110, A-B, B-C und C-D."
+  },
+  {
+    "name": "Schlauchbinde",
+    "bild": "schlauchbinde.png",
+    "erklaerung": "Eine Schlauchbinde dient dazu, kleinere Spritzlöcher abzudichten, um einen sofortigen Schlauchwechsel zu vermeiden. Standardmäßig werden die Größen B und C verwendet."
+  },
+  {
+    "name": "Schlauchhalter",
+    "bild": "schlauchhalter.png",
+    "erklaerung": "Ein Schlauchhalter wird zum Verhängen und Entlasten von Schlauchleitungen verwendet, die z. B. über Leitern, in Treppenräumen, in steilem Gelände oder frei hängend verlegt werden. Wichtig ist, dass der Schlauchhalter vor der Kupplung eingebaut wird, damit der Schlauch bei Belastung nicht durchrutscht und dass die Öffnung des Hakens nach unten zeigt, damit sich der Schlauchhalter bei Belastung nicht selbst öffnet."
+  }
+]

@@ -1,0 +1,185 @@
+[
+  {
+    "frage": "Wofür wird ein ABC-Kupplungsschlüssel verwendet?",
+    "antworten": [
+      "Zum Kuppeln und Nachziehen von Schlauchkupplungen",
+      "Zum Löschen von Bränden",
+      "Zum Ansaugen von Wasser",
+      "Zum Messen des Drucks"
+    ],
+    "richtig": [0],
+    "erklaerung": "Kupplungsschlüssel werden immer dann zum Kuppeln und Nachziehen verwendet, wenn dies von Hand nicht mehr möglich ist. Es gibt sie als ABC-Kupplungsschlüssel und als Hochdruckkupplungsschlüssel. Der gängigste ABC-Kupplungsschlüssel ist ein zweiseitiger Hakenschlüssel, bei dem die größere Seite für A-Kupplungen und die kleinere Seite für B- und C-Kupplungen vorgesehen ist."
+  },
+  {
+    "frage": "Welche Besonderheit hat der ABC-Kupplungsschlüssel?",
+    "antworten": [
+      "Er ist ein zweiseitiger Hakenschlüssel",
+      "Er misst den Druck",
+      "Er saugt Wasser an",
+      "Er löscht Brände"
+    ],
+    "richtig": [0],
+    "erklaerung": "Kupplungsschlüssel werden immer dann zum Kuppeln und Nachziehen verwendet, wenn dies von Hand nicht mehr möglich ist. Es gibt sie als ABC-Kupplungsschlüssel und als Hochdruckkupplungsschlüssel. Der gängigste ABC-Kupplungsschlüssel ist ein zweiseitiger Hakenschlüssel."
+  },
+
+  {
+    "frage": "Wozu dient ein Hydrantenschlüssel?",
+    "antworten": [
+      "Zum Öffnen von Hydranten",
+      "Zum Verbinden von Schläuchen",
+      "Zum Löschen von Bränden",
+      "Zum Abdichten von Schläuchen"
+    ],
+    "richtig": [0],
+    "erklaerung": "Hydrantenschlüssel gibt es in zwei Ausführungen, nämlich für den Ober- und den Unterflurhydranten. Mit dem Oberflurhydrantenschlüssel kann man mit dem Haken den Hydranten öffnen und der große Dreikant dient zum Öffnen der Blindkupplung."
+  },
+  {
+    "frage": "Welche Funktion hat der Dreikant am Hydrantenschlüssel?",
+    "antworten": [
+      "Zum Öffnen der Blindkupplung",
+      "Zum Schneiden von Schläuchen",
+      "Zum Ansaugen von Wasser",
+      "Zum Halten von Schläuchen"
+    ],
+    "richtig": [0],
+    "erklaerung": "Der große Dreikant am Hydrantenschlüssel dient zum Öffnen der Blindkupplung."
+  },
+
+  {
+    "frage": "Wofür wird ein Mehrzweckstrahlrohr verwendet?",
+    "antworten": [
+      "Zur gezielten Löschwasserabgabe",
+      "Zum Ansaugen von Wasser",
+      "Zum Messen von Druck",
+      "Zum Verbinden von Schläuchen"
+    ],
+    "richtig": [0],
+    "erklaerung": "Ein Mehrzweckstrahlrohr benötigt man zur Löschwasserabgabe. Dadurch ist ein gezieltes Löschen möglich. Durch Abschrauben des Mundstückes lässt sich die Durchflussmenge verdoppeln."
+  },
+  {
+    "frage": "Was passiert beim Abschrauben des Mundstücks?",
+    "antworten": [
+      "Die Durchflussmenge wird erhöht",
+      "Das Wasser stoppt",
+      "Der Druck verschwindet",
+      "Das Rohr blockiert"
+    ],
+    "richtig": [0],
+    "erklaerung": "Durch Abschrauben des Mundstückes lässt sich die Durchflussmenge verdoppeln. Beim C-Strahlrohr von 100 auf 200 l/min und beim B-Strahlrohr von 400 auf 800 l/min."
+  },
+
+  {
+    "frage": "Welche Aufgabe hat ein Verteiler?",
+    "antworten": [
+      "Verteilt Wasser auf mehrere Leitungen",
+      "Erhöht den Druck",
+      "Saugt Wasser an",
+      "Dichtet Schläuche ab"
+    ],
+    "richtig": [0],
+    "erklaerung": "Der Verteiler hat die Aufgabe, das ankommende Löschwasser aus der Zubringerleitung in drei Löschleitungen zu verteilen."
+  },
+  {
+    "frage": "Wie viele Ausgänge hat ein Verteiler?",
+    "antworten": [
+      "Drei",
+      "Einen",
+      "Zwei",
+      "Vier"
+    ],
+    "richtig": [0],
+    "erklaerung": "Der Verteiler verfügt über einen B-Eingang sowie zwei C- und einen B-Ausgang, also insgesamt drei Ausgänge."
+  },
+
+  {
+    "frage": "Wozu dient ein Saugkopf?",
+    "antworten": [
+      "Zur Wasserentnahme",
+      "Zum Löschen",
+      "Zum Verbinden",
+      "Zum Messen"
+    ],
+    "richtig": [0],
+    "erklaerung": "Der Saugkopf dient zur Wasserentnahme und verhindert durch das Schmutzsieb das Eindringen von Schmutz."
+  },
+  {
+    "frage": "Welche Aufgabe hat das Rückschlagventil im Saugkopf?",
+    "antworten": [
+      "Verhindert das Abreißen der Wassersäule",
+      "Erhöht den Druck",
+      "Stoppt das Wasser",
+      "Misst die Temperatur"
+    ],
+    "richtig": [0],
+    "erklaerung": "Das Rückschlagventil verhindert das Abreißen der Wassersäule bei Wasser halt."
+  },
+
+  {
+    "frage": "Wofür wird ein Übergangsstück verwendet?",
+    "antworten": [
+      "Zum Verbinden unterschiedlicher Kupplungen",
+      "Zum Löschen",
+      "Zum Ansaugen",
+      "Zum Abdichten"
+    ],
+    "richtig": [0],
+    "erklaerung": "Übergangsstücke dienen zur Verbindung von Kupplungen verschiedener Größen."
+  },
+  {
+    "frage": "Welche Größen gibt es bei Übergangsstücken?",
+    "antworten": [
+      "A-B, B-C, C-D",
+      "Nur B-B",
+      "Nur C-C",
+      "Keine Größen"
+    ],
+    "richtig": [0],
+    "erklaerung": "Übergangsstücke gibt es in den Größen A-B, B-C und C-D sowie weitere Varianten."
+  },
+
+  {
+    "frage": "Wozu dient eine Schlauchbinde?",
+    "antworten": [
+      "Zum Abdichten kleiner Schäden",
+      "Zum Öffnen von Hydranten",
+      "Zum Ansaugen von Wasser",
+      "Zum Messen"
+    ],
+    "richtig": [0],
+    "erklaerung": "Eine Schlauchbinde dient dazu, kleinere Spritzlöcher abzudichten, um einen sofortigen Schlauchwechsel zu vermeiden."
+  },
+  {
+    "frage": "Warum wird eine Schlauchbinde verwendet?",
+    "antworten": [
+      "Um einen Schlauchwechsel zu vermeiden",
+      "Um Druck zu erhöhen",
+      "Zum Löschen",
+      "Zum Verbinden"
+    ],
+    "richtig": [0],
+    "erklaerung": "Sie wird verwendet, um kleinere Schäden abzudichten und den Einsatz fortzuführen."
+  },
+
+  {
+    "frage": "Wofür wird ein Schlauchhalter verwendet?",
+    "antworten": [
+      "Zum Sichern von Schläuchen",
+      "Zum Löschen",
+      "Zum Messen",
+      "Zum Verbinden"
+    ],
+    "richtig": [0],
+    "erklaerung": "Ein Schlauchhalter wird zum Verhängen und Entlasten von Schlauchleitungen verwendet."
+  },
+  {
+    "frage": "Wo muss ein Schlauchhalter angebracht werden?",
+    "antworten": [
+      "Vor der Kupplung",
+      "Hinter dem Strahlrohr",
+      "Am Hydranten",
+      "Am Verteiler"
+    ],
+    "richtig": [0],
+    "erklaerung": "Der Schlauchhalter muss vor der Kupplung angebracht werden, damit der Schlauch nicht abrutscht."
+  }
+]

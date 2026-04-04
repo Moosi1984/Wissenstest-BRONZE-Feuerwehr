@@ -1,0 +1,71 @@
+[
+{"frage":"Wer ist für die Führung der Ortsfeuerwehr verantwortlich?","antworten":["Der Bürgermeister","Der Abschnittskommandant/din","Der Bezirkskommandant/din","Der Ortskommandant/din"],"richtig":[3],"erklaerung":"Weil der Ortskommandant der Chef der Feuerwehr ist:\nEr behält den Überblick, sorgt für Sicherheit, hat eine besondere Ausbildung, spricht für die Feuerwehr und das Gesetz sagt, dass er der Leiter sein muss."},
+
+{"frage":"Nenne 3 konkrete Aufgaben/ Einsätze zu den deine Feuerwehr herangezogen werden kann?","antworten":["Brand, Verkehrsunfall, Winterdienst","Brand, Unwettereinsatz, Verkehrsunfall","Forstarbeiten, Brand, Verkehrsunfall","Brand, Verkehrsunfall, Hausmeisterservice"],"richtig":[1],"erklaerung":"Die Feuerwehr hilft bei Bränden, bei schweren Unwettern und bei Verkehrsunfällen. Das sind ihre echten Aufgaben, weil sie Menschen retten, Gefahren beseitigen und schnell helfen muss."},
+
+{"frage":"Woraus besteht die Einsatzbekeidung?","antworten":["Einsatzhandschuhe, Feuerwehr- Sicherheitsstiefel, Einsatzjacke","Warnüberwurf, Bergschuhe, Einsatzjacke","Einsatzhose, Schutzjacke, Feuerwehrhelm","Feuerwehrhelm, Schutzjacke, Engelbert Stauss Hose"],"richtig":[0,2],"erklaerung":"Die Feuerwehr braucht Kleidung, die gut schützt: Dazu gehören Einsatzhandschuhe, Sicherheitsstiefel, eine Einsatzjacke – und auch eine Einsatzhose, eine starke Schutzjacke und natürlich der Feuerwehrhelm. Diese Sachen schützen die Feuerwehrleute vor Hitze, Feuer und Gefahren."},
+
+{"frage":"Warum muss jede Einsatzbekleidung nach jedem Einstatz gereinigt werden?","antworten":["Muss nicht! Rauchgeruch zeigt, dass du bereits Einsatzerfahrung hast","Zum Entfernen von Schadstoffen, die sich beim Einsatz festsetzen","Um Spind sauber zu halten und die Lebensdauer zu verlängern","Eine dreckige Uniform sieht doch cool aus"],"richtig":[1],"erklaerung":"Nach jedem Einsatz muss die Kleidung gewaschen werden, weil sich gefährliche Schadstoffe, Rauch und giftige Partikel darin festsetzen. Wenn man sie nicht reinigt, könnten sie den Feuerwehrleuten schaden."},
+
+{"frage":"Welche Bekleidung gehört zusätzlich zu der Einsatzbekleidung, wenn man mit der Motorsäge arbeitet?","antworten":["Man braucht keine es genügt die Einsatzbekleidung","Englbert Stauss Hose","Schnittschutzhose","Motorsägen Hose"],"richtig":[2],"erklaerung":"Beim Arbeiten mit der Motorsäge braucht man eine Schnittschutzhose, weil sie die Beine schützt. Wenn die Säge abrutscht, stoppt die Hose die Kette und verhindert schwere Verletzungen."},
+
+{"frage":"Welche Feuerwehrfahrzeuge sind besonders für der Löscheinsatz geeignet?","antworten":["Rüstlöschfahrzeuge","Tanklöschfahrzeuge","Klein- und Löschfahrzeuge","Sonderfahrzeuge"],"richtig":[1,2],"erklaerung":"Tanklöschfahrzeuge und kleine Löschfahrzeuge sind für Löscheinsätze super geeignet, weil sie Wasser und die wichtigen Geräte zum Löschen dabeihaben. Damit können die Feuerwehrleute schnell Brände bekämpfen."},
+
+{"frage":"Was bedeutet die Abkürzung KLF-A?","antworten":["Klein-Löschfahrzeug mit Atemschutz","Klein- Löschfahrzeug mit Allem Ausgestattet","Klein- Löschfahrzeug mit Anhängekupplung","Klein- Löschfahrzeug mit Allradantrieb"],"richtig":[3],"erklaerung":"KLF-A bedeutet Klein-Löschfahrzeug mit Allradantrieb. Der Allrad hilft dem Feuerwehrauto, überall hinzufahren – auch auf steilen, matschigen oder schneebedeckten Wegen. So kommt die Feuerwehr immer schnell zum Einsatz."},
+
+{"frage":"Worauf ist bei der Lagerung von Geräten im Fahrzeug zu achten?","antworten":["Das die Geräte nur in der dafür vorgesehenen Halterung gelagert wird","Das die Bedienungsanleitung unmittelbar greifbar ist","Das die Ladungssicherung geschlossen ist","Ist eh egal, das macht der Gerätewart"],"richtig":[0,2],"erklaerung":"Geräte müssen immer in ihrer richtigen Halterung liegen und gut gesichert sein. So kann im Auto nichts herumfliegen und niemand wird verletzt – auch wenn das Feuerwehrauto schnell fahren muss."},
+
+{"frage":"Welche Notrufnummer gehen zur Leitstelle Tirol?","antworten":["133","112","144","122"],"richtig":[2,3],"erklaerung":"Die Notrufnummern 112, 144 und 140 gehen zur Leitstelle Tirol. Dort sitzen Helfer, die sofort Feuerwehr, Rettung oder Bergrettung schicken. Diese Nummern sind für Notfälle da, damit schnell Hilfe kommt."},
+
+{"frage":"Durch welche 2 offiziellen Alarmierungsmittel wird die Feuerwehr alarmiert?","antworten":["Pager","Whats App","SMS","Sirene"],"richtig":[0,3],"erklaerung":"Die Feuerwehr wird mit Pager und Sirene alarmiert. Der Pager piepst direkt bei den Feuerwehrleuten, und die Sirene heult laut für alle im Ort. So wissen alle schnell, dass es einen Einsatz gibt."},
+
+{"frage":"Welche Arten von Funkgespräche werden im Feuerwehrfunk durchgegeben?","antworten":["Meldung, Antwort, Frage","Meldung, Sprichwort, Frage","Meldung, Befehl, Frage","Meldung, Mitteilung, Frage"],"richtig":[2],"erklaerung":"Im Feuerwehrfunk werden Meldungen, Befehle und Fragen gesprochen. So wissen alle genau, was passiert, was gemacht werden soll und ob jemand noch etwas wissen muss."},
+
+{"frage":"Wie heißt die Funk Fixstation im Feuerwehrhaus?","antworten":["Anton","Friedrich","Florian","Es ist immer euer Nachname"],"richtig":[2],"erklaerung":"Weil alle Feuerwehren ihre Funkstation ‚Florian‘ nennen, damit jeder sofort erkennt, dass es die Feuerwehrfunkstelle im Feuerwehrhaus ist."},
+
+{"frage":"Welche Grundregel ist beim Beginn des Funkgespräches zu beachten?","antworten":["Denken, Atmen, Schlucken, Sprechen","Denken, Atmen, Drücken, Sprechen","Denken, Drücken, Schlucken, Sprechen","Denken, Drücken, Atmen, Sprechen"],"richtig":[2],"erklaerung":"Man soll erst nachdenken, dann die Taste drücken, dann schlucken und erst danach sprechen. So klingt das Funkgespräch klar und deutlich, und alle verstehen dich gut."},
+
+{"frage":"Wie ist die Tonfolge des Sirenensignal für 'Zivilschutz Warnung'?","antworten":["1 Minute gleichbleibender Dauerton","2 Minuten gleichbleibender Dauerton","3 Minuten gleichbleibender Dauerton","1 Minute auf und abschwellender Ton"],"richtig":[2],"erklaerung":"Das Sirenensignal für die Zivilschutz-Warnung dauert 3 Minuten gleich lang. So hören alle Menschen, dass eine Gefahr droht und sie Radio oder Handy einschalten sollen."},
+
+{"frage":"Welche Wasserentnahmestellen für Löschwasser kennst du?","antworten":["Mobile Löschwasserentnahmestellen","Bach, Teich = unabhängige Wasserentnahmestellen","Hydranten = abhängige Wasserentnahmestellen","selbst Versorger Wasserentnahmestellen"],"richtig":[1,2],"erklaerung":"Bäche und Teiche sind unabhängige Wasserstellen, weil sie ohne Technik Wasser liefern. Hydranten sind abhängig, weil sie Wasser aus dem Leitungsnetz brauchen. Beide kann die Feuerwehr zum Löschen verwenden."},
+
+{"frage":"Was musst du mit einem Hydranten vor Inbetriebnahme machen?","antworten":["Den Absperrschieber öffnen","Die Anwohner warnen, dass Wasser rostig sein kann","Den Hydrant Spülen","Den Hydranten befühlen"],"richtig":[2],"erklaerung":"Ein Hydrant muss vor dem Einsatz gespült werden, damit Schmutz, Rost und kleine Steinchen rausgespült werden. So kommt sauberes Wasser und die Geräte der Feuerwehr werden nicht kaputt."},
+
+{"frage":"Warum müssen Hydranten gespült werden?","antworten":["Um Verunreinigungen (z.B. Rost, Schmutzablagerungen,) auszuspülen","Damit die Luft entweichen kann","Damit Gebäude vor einem zu hohen Wasserdruck geschützt werden","Damit schneller Wasser kommt"],"richtig":[0],"erklaerung":"Hydranten müssen gespült werden, damit Schmutz, Rost und Dreck rauskommen. Sonst kann das Wasser die Geräte der Feuerwehr beschädigen oder die Schläuche verstopfen."},
+
+{"frage":"Welche Arten von Hydranten gibt es?","antworten":["Kaltwasserhydranten","Überflurhydranten","Unterflurhydranten","Trinkwasserhydranten"],"richtig":[1,2],"erklaerung":"Es gibt Überflurhydranten, die man über der Erde sieht, und Unterflurhydranten, die im Boden versteckt sind. Aus beiden kann die Feuerwehr Wasser zum Löschen holen."},
+
+{"frage":"Welche genormte Länge hat ein B – Schlauch?","antworten":["10 Meter","15 Meter","20 Meter","25 Meter"],"richtig":[2],"erklaerung":"Ein B-Schlauch ist immer 20 Meter lang. Diese Länge ist genormt, damit alle Schläuche gut zusammenpassen und die Feuerwehr schnell arbeiten kann."},
+
+{"frage":"Welchem Zweck dient ein Hydrantenschlüssel?","antworten":["Zum Öffnen der Blindkupplung am Hydranten","Zum Öffnen des Absperrschieber","Zum fest ziehen des angeschlossenen Schlauches","Zum Öffnen des Hydranten"],"richtig":[0,3],"erklaerung":"Ein Hydrantenschlüssel wird gebraucht, um den Hydranten zu öffnen und die Blindkupplung abzunehmen. Ohne ihn kommt man nicht ans Wasser – deshalb ist er so wichtig für die Feuerwehr."},
+
+{"frage":"Welchen Zweck dient der ABC - Kupplungsschlüssel?","antworten":["Zum Öffnen der Blindkupplung am Ausgang des Hydranten","Zum Vollständigen Schließen von A, B, C – Kupplungen","Zum Öffnen von festgezogenen / festsitzenden Kupplungen","Zum Gewaltasamen Auskuppeln der Einbaupumpe bei tech. Problemen"],"richtig":[1],"erklaerung":"Der ABC-Kupplungsschlüssel hilft der Feuerwehr, die Schläuche richtig fest zuzudrehen. So sind die A-, B- und C-Kupplungen dicht und kein Wasser spritzt heraus."},
+
+{"frage":"Wozu dient der Schlauchhalter?","antworten":["Um Kupplungen bzw. Schläuche zu entlasten","Um Schläuche zu halten","Um Kupplungen bzw. Schläuche zu befestigen","Um den Schlauch zu tragen"],"richtig":[0,2],"erklaerung":"Ein Schlauchhalter hilft, Schläuche und Kupplungen zu entlasten und gut festzumachen. So hängen sie nicht durch, werden nicht kaputt und alles bleibt sicher an seinem Platz."},
+
+{"frage":"Welche Arten von Schläuchen werden in der Feuerwehr verwendet?","antworten":["Niederdruckschläuche","Druckschläuche","Saugschläuche","Vakumschläuche"],"richtig":[1,2],"erklaerung":"Die Feuerwehr benutzt Druckschläuche und Saugschläuche."},
+
+{"frage":"Welche Aufgaben hat der Saugkopf?","antworten":["Beschweren, dass die Saugleitung zum Grund hin absinkt","Verhindert das Eindringen von Verunreinigungen in den Schlauch","Ermöglicht das schneller aussaugen","Hält die Wassersäule im Saugschlauch bei 'Wasser halt'"],"richtig":[1,3],"erklaerung":"Der Saugkopf hält Schmutz fern und Wasser im Schlauch."},
+
+{"frage":"Welchen unterschied gibt es zwischen Saug – und Druckschläuchen?","antworten":["Saugschläuche haben eine Saug- u. Drucklippe u. sind formbeständig","Druckschläuche haben eine Saug- u. Drucklippe u. sind formbeständig","Druckschläuche haben nur eine Drucklippe u. sind flexibel","Saugschläuche haben nur eine Drucklippe u. sind flexibel"],"richtig":[0,2],"erklaerung":"Saugschläuche sind stabil, Druckschläuche flexibel."},
+
+{"frage":"Welche Voraussetzung braucht eine Verbrennung?","antworten":["Brennstoff, Sauerstoff","Kohlendioxid, Temperatur (Energie)","Temperatur (Energie) richtiges Mischungsverhältnis","Brennstoff, Kohlenmonoxid"],"richtig":[0,2],"erklaerung":"Feuer braucht Brennstoff, Sauerstoff und richtige Temperatur."},
+
+{"frage":"Welche Brandklassen gibt es?","antworten":["A, B, C, D, E, F","A, B, C, D","A, B, C, D, F","A, B, C"],"richtig":[2],"erklaerung":"A, B, C, D und F."},
+
+{"frage":"Was bedeutet die Brandklasse F?","antworten":["Brennbare Flüssigkeiten","Brennbare Gase","Brennbare Speiseöle und Fette","Für Fahrzeuge geeignet"],"richtig":[2],"erklaerung":"Speiseöle und Fette."},
+
+{"frage":"Was heißt Löschen?","antworten":["Den Kohlendioxid entnehmen","Die Voraussetzung für einen Brand ändern (Energie, Brennstoff, Sauerstoffentzug ändern des Mischungsverhältnisses)","Das Kohlenmonoxid entnehmen","Einfach nur Wasser drauf spritzen"],"richtig":[1],"erklaerung":"Voraussetzungen für Brand ändern."},
+
+{"frage":"Welche 2 Arten von Leinen werden in der Feuerwehr hauptsächlich verwendet?","antworten":["Die Rettungs- und Arbeitsleine","Die Ventil- und Bindeleine","Die Sicherungs- und Bergeleine","Die Abseil- und Bergeleine"],"richtig":[0],"erklaerung":"Rettungsleine und Arbeitsleine."},
+
+{"frage":"Wie erkenne ich eine Rettungsleine?","antworten":["Sicherheitskarabiner nicht farblich markiert und Typenschild","Oranger Beutel","Spezialmarkierung am Ende des Seils","Blauer Beutel und Sicherheitskarabiner farblich markiert"],"richtig":[0,1],"erklaerung":"Karabiner + oranger Beutel."},
+
+{"frage":"Nenne 3 Kleinlöschgeräte?","antworten":["Kübelspritz, Feuerfächer","Feuerlöscher, Feuerpatsche","Kübelspritze","Hydranten"],"richtig":[1,2],"erklaerung":"Kleinlöschgeräte sind Geräte für kleine Brände."},
+
+{"frage":"Welches Kleinlöschgerät sollte in jedem Haushalt zu finden sein?","antworten":["Kübelspritze","Feuertuch","Feuerlöscher","Feuerhandschuh"],"richtig":[2],"erklaerung":"Feuerlöscher."},
+
+{"frage":"Welche Arten von Feuerwehrmitgliedern gibt es bei der Feuerwehr?","antworten":["Feuerwehrkids, aktive Mitglieder","Feuerwehrjugend, aktive Mitglieder","Bürgermeister, Mitglieder außer Dienst, Ehrenmitglieder","Mitglieder der Reserve, Mitglieder außer Dienst, Ehrenmitglieder"],"richtig":[1,2],"erklaerung":"Feuerwehrjugend, aktive Mitglieder und weitere Gruppen."},
+
+{"frage":"Wer ist für die Beschaffung und Unterbringung der Feuerwehrfahrzeuge verantwortlich?","antworten":["Die Feuerwehr","Das Land Tirol","Die Gemeinde","Die Republik Österreich"],"richtig":[2],"erklaerung":"Die Gemeinde ist zuständig."}
+]
