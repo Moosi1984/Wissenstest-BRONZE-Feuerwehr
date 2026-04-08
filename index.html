@@ -6,90 +6,27 @@
 <title>Wissenstest</title>
 
 <style>
-* {
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
-    font-family:-apple-system, BlinkMacSystemFont, sans-serif;
-}
+*{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,sans-serif}
+.header{width:100%;height:140px}
+.header img{width:100%;height:100%;object-fit:cover}
+.content{background:#f2f2f2;padding:15px;min-height:100vh}
 
-/* HEADER */
-.header {
-    width:100%;
-    height:140px;
-}
-.header img {
-    width:100%;
-    height:100%;
-    object-fit:cover;
-}
+.card{display:flex;align-items:center;background:white;border-radius:20px;padding:15px;margin-top:15px;box-shadow:0 4px 10px rgba(0,0,0,0.05);cursor:pointer}
+.card img{width:70px;height:70px;border-radius:16px;margin-right:15px}
 
-/* CONTENT */
-.content {
-    background:#f2f2f2;
-    padding:15px;
-    min-height:100vh;
-}
+.quiz-box{background:white;border-radius:20px;padding:20px;box-shadow:0 4px 10px rgba(0,0,0,0.05)}
 
-/* CARDS */
-.card {
-    display:flex;
-    align-items:center;
-    background:white;
-    border-radius:20px;
-    padding:15px;
-    margin-top:15px;
-    box-shadow:0 4px 10px rgba(0,0,0,0.05);
-}
+.btn{width:100%;padding:15px;border:none;border-radius:14px;margin-top:10px;font-size:18px;font-weight:600;cursor:pointer}
+.btn-back{background:#555;color:white}
+.btn-next{background:linear-gradient(90deg,#ff3b3b,#ff9800);color:white}
 
-.card img {
-    width:70px;
-    height:70px;
-    border-radius:16px;
-    margin-right:15px;
-    object-fit:cover;
-}
+.answer{background:#eee;padding:14px;border-radius:12px;margin:6px 0;cursor:pointer}
+.correct{background:#4caf50!important;color:white}
+.wrong{background:#f44336!important;color:white}
+.selected{border:2px solid #ff3b3b}
 
-/* QUIZ BOX */
-.quiz-box {
-    background:white;
-    border-radius:20px;
-    padding:20px;
-    box-shadow:0 4px 10px rgba(0,0,0,0.05);
-}
-
-/* BUTTONS */
-.btn {
-    width:100%;
-    padding:15px;
-    border:none;
-    border-radius:14px;
-    margin-top:10px;
-    font-size:18px;
-    font-weight:600;
-}
-
-.btn-back { background:#555; color:white; }
-.btn-next { background:linear-gradient(90deg,#ff3b3b,#ff9800); color:white; }
-
-/* ANSWERS */
-.answer {
-    background:#eee;
-    padding:14px;
-    border-radius:12px;
-    margin:6px 0;
-}
-
-.correct { background:#4caf50 !important; color:white; }
-.wrong { background:#f44336 !important; color:white; }
-.selected { border:2px solid #ff3b3b; }
-
-/* QUIZ IMAGE */
-.quiz-img {
-    width:140px;
-    display:block;
-    margin:15px auto;
-}
+.quiz-img{width:140px;display:block;margin:15px auto}
+.knoten-img{width:100%;max-width:350px;display:block;margin:20px auto}
 </style>
 </head>
 
@@ -99,230 +36,363 @@
 
 <script>
 
-let alleFragen=[], dienstgrade=[], armaturen=[], armaturenBilder=[];
+const state = {
+    modus:"",
+    fragen:[],
+    index:0,
+    punkte:0,
+    auswahl:[],
+    beantwortet:false,
+    currentAnswers:[]
+};
 
-async function loadSafe(file){
-    try {
-        return await (await fetch(file)).json();
-    } catch(e){
-        console.log("Fehlt:", file);
+let alleFragen=[],dienstgrade=[],armaturen=[],armaturenBilder=[],knoten=[];
+
+function render(html){
+    document.getElementById("app").innerHTML = html;
+}
+
+function shuffle(array){
+    for(let i=array.length-1;i>0;i--){
+        const j=Math.floor(Math.random()*(i+1));
+        [array[i],array[j]]=[array[j],array[i]];
+    }
+    return array;
+}
+
+async function load(file){
+    try{
+        const res = await fetch(file);
+        return await res.json();
+    }catch{
+        console.error("Fehler beim Laden:", file);
         return [];
     }
 }
 
 async function start(){
-    alleFragen = await loadSafe("fragen.json");
-    dienstgrade = await loadSafe("dienstgrade.json");
-    armaturen = await loadSafe("armaturen.json");
-    armaturenBilder = await loadSafe("armaturen_bilder.json");
+    alleFragen = await load("fragen.json");
+    dienstgrade = await load("dienstgrade.json");
+    armaturen = await load("armaturen.json");
+    armaturenBilder = await load("armaturen_bilder.json");
+    knoten = await load("knoten.json");
 
-    document.getElementById("app").innerHTML = `
-    
-    <div class="header">
-        <img src="banner.png">
-    </div>
+    render(`
+    <div class="header"><img src="banner.png"></div>
+    <div class="content" id="menu"></div>
+    `);
 
-    <div class="content">
+    const menu = document.getElementById("menu");
 
-        <div class="card" onclick="startDienstgrade()">
-            <img src="dienstgrade.png">
-            <div><b>Dienstgrade</b><br>${dienstgrade.length} Fragen</div>
-        </div>
+    function createCard(img,title,count,fn){
+        const card = document.createElement("div");
+        card.className="card";
+        card.innerHTML = `
+            <img src="${img}">
+            <div><b>${title}</b><br>${count} ${title==="Knoten"?"Knoten":"Fragen"}</div>
+        `;
+        card.addEventListener("click", fn);
+        return card;
+    }
 
-        <div class="card" onclick="startTheorie()">
-            <img src="theorie.png">
-            <div><b>Theorie</b><br>${alleFragen.length} Fragen</div>
-        </div>
-
-        <div class="card" onclick="startArmaturen()">
-            <img src="armaturen.png">
-            <div><b>Armaturen Theorie</b><br>${armaturen.length} Fragen</div>
-        </div>
-
-        <div class="card" onclick="startArmaturenBilder()">
-            <img src="armatur_erkennen.png">
-            <div><b>Armaturen erkennen</b><br>${armaturenBilder.length} Fragen</div>
-        </div>
-
-    </div>`;
+    menu.appendChild(createCard("dienstgrade.png","Dienstgrade",dienstgrade.length,startDienstgrade));
+    menu.appendChild(createCard("theorie.png","Theorie",alleFragen.length,startTheorie));
+    menu.appendChild(createCard("armaturen.png","Armaturen Theorie",armaturen.length,startArmaturen));
+    menu.appendChild(createCard("armatur_erkennen.png","Armaturen erkennen",armaturenBilder.length,startArmaturenBilder));
+    menu.appendChild(createCard("knoten.png","Knoten",knoten.length,startKnoten));
 }
 
-/* ================= QUIZ ================= */
+/* QUIZ */
 
-let modus="", fragen=[], index=0, punkte=0;
-let auswahl=[], beantwortet=false, currentAnswers=[];
+function reset(){
+    state.index=0;
+    state.punkte=0;
+}
 
-function shuffle(a){ return a.sort(()=>Math.random()-0.5); }
+function startTheorie(){
+    state.modus="theorie";
+    state.fragen=shuffle([...alleFragen]);
+    reset();
+    showQuiz();
+}
 
-function startTheorie(){ modus="theorie"; fragen=shuffle([...alleFragen]); reset(); showQuiz(); }
-function startArmaturen(){ modus="armaturen"; fragen=shuffle([...armaturen]); reset(); showQuiz(); }
-
-function reset(){ index=0; punkte=0; }
+function startArmaturen(){
+    state.modus="armaturen";
+    state.fragen=shuffle([...armaturen]);
+    reset();
+    showQuiz();
+}
 
 function showQuiz(){
-    auswahl=[]; beantwortet=false;
-    let f=fragen[index];
+    state.auswahl=[];
+    state.beantwortet=false;
 
-    currentAnswers = f.antworten.map((a,i)=>({text:a,index:i}))
-        .sort(()=>Math.random()-0.5);
+    let f=state.fragen[state.index];
 
-    document.getElementById("app").innerHTML=`
+    state.currentAnswers = shuffle(
+        f.antworten.map((a,i)=>({text:a,index:i}))
+    );
+
+    render(`
     <div class="content">
-    <div class="quiz-box">
+        <div class="quiz-box">
+            <button class="btn btn-back" id="backBtn">Zur Startseite</button>
+            <h3>${state.index+1}/${state.fragen.length}</h3>
+            <h3>${f.frage}</h3>
+            <div id="answers"></div>
+            <button class="btn btn-next" id="mainBtn">Bestätigen</button>
+        </div>
+    </div>`);
 
-        <button class="btn btn-back" onclick="start()">Zur Startseite</button>
+    document.getElementById("backBtn").onclick = start;
 
-        <h3>${index+1}/${fragen.length}</h3>
-        <h3>${f.frage}</h3>
+    const answersDiv = document.getElementById("answers");
 
-        ${currentAnswers.map((a,i)=>`
-            <div class="answer" onclick="toggle(${i},this)">
-                ${a.text}
-            </div>
-        `).join("")}
+    state.currentAnswers.forEach((a,i)=>{
+        const el=document.createElement("div");
+        el.className="answer";
+        el.textContent=a.text;
 
-        <button class="btn btn-next" id="ok" onclick="checkQuiz()" disabled>Bestätigen</button>
-        <button class="btn btn-next" id="next" onclick="next()" style="display:none;">Weiter</button>
+        el.addEventListener("click", ()=>{
+            if(state.beantwortet) return;
 
-    </div>
-    </div>`;
-}
+            if(state.auswahl.includes(i)){
+                state.auswahl = state.auswahl.filter(x=>x!==i);
+                el.classList.remove("selected");
+            }else{
+                state.auswahl.push(i);
+                el.classList.add("selected");
+            }
+        });
 
-function toggle(i,el){
-    if(beantwortet) return;
-
-    if(auswahl.includes(i)){
-        auswahl=auswahl.filter(x=>x!==i);
-        el.classList.remove("selected");
-    } else {
-        auswahl.push(i);
-        el.classList.add("selected");
-    }
-
-    document.getElementById("ok").disabled = auswahl.length===0;
-}
-
-function checkQuiz(){
-    beantwortet=true;
-    let f=fragen[index];
-
-    document.querySelectorAll(".answer").forEach((el,i)=>{
-        let orig=currentAnswers[i].index;
-
-        if(f.richtig.includes(orig)) el.classList.add("correct");
-        if(auswahl.includes(i) && !f.richtig.includes(orig)){
-            el.classList.add("wrong");
-        }
-
-        el.style.pointerEvents="none";
+        answersDiv.appendChild(el);
     });
 
-    if(auswahl.length===f.richtig.length &&
-       auswahl.every(i=>f.richtig.includes(currentAnswers[i].index))){
-        punkte++;
-    }
-
-    let box=document.createElement("div");
-    box.className="quiz-box";
-    box.style.marginTop="10px";
-    box.innerHTML=`<h4>Erklärung</h4><p>${f.erklaerung}</p>`;
-    document.querySelector(".content").appendChild(box);
-
-    document.getElementById("ok").style.display="none";
-    document.getElementById("next").style.display="block";
+    document.getElementById("mainBtn").onclick = handleButton;
 }
 
-/* ================= BILDER ================= */
+function handleButton(){
+    if(!state.beantwortet){
+        check();
+        document.getElementById("mainBtn").innerText="Weiter";
+    }else{
+        next();
+    }
+}
 
-function startDienstgrade(){ modus="dienst"; fragen=shuffle([...dienstgrade]); reset(); showBild(); }
-function startArmaturenBilder(){ modus="bild"; fragen=shuffle([...armaturenBilder]); reset(); showBild(); }
+function check(){
+    state.beantwortet=true;
+    let f=state.fragen[state.index];
+
+    document.querySelectorAll(".answer").forEach((el,i)=>{
+        let orig=state.currentAnswers[i].index;
+
+        if(f.richtig.includes(orig)) el.classList.add("correct");
+        if(state.auswahl.includes(i) && !f.richtig.includes(orig)) el.classList.add("wrong");
+    });
+
+    if(
+        state.auswahl.length===f.richtig.length &&
+        state.auswahl.every(i=>f.richtig.includes(state.currentAnswers[i].index))
+    ){
+        state.punkte++;
+    }
+
+    document.querySelector(".content").insertAdjacentHTML("beforeend",
+        `<div class="quiz-box" style="margin-top:10px">
+            <h4>Erklärung</h4><p>${f.erklaerung}</p>
+        </div>`);
+}
+
+/* BILDER */
+
+function startDienstgrade(){
+    state.modus="dienst";
+    state.fragen=shuffle([...dienstgrade]);
+    reset();
+    showBild();
+}
+
+function startArmaturenBilder(){
+    state.modus="bild";
+    state.fragen=shuffle([...armaturenBilder]);
+    reset();
+    showBild();
+}
 
 function showBild(){
-    auswahl=[]; beantwortet=false;
+    state.auswahl=[];
+    state.beantwortet=false;
 
-    let f=fragen[index];
-    let antworten = shuffle(fragen.map(x=>x.name)).slice(0,4);
+    let f=state.fragen[state.index];
+
+    let antworten=shuffle(state.fragen.map(x=>x.name)).slice(0,4);
 
     if(!antworten.includes(f.name)){
         antworten[0]=f.name;
         antworten=shuffle(antworten);
     }
 
-    currentAnswers=antworten;
+    state.currentAnswers=antworten;
 
-    document.getElementById("app").innerHTML=`
+    render(`
     <div class="content">
-    <div class="quiz-box">
+        <div class="quiz-box">
+            <button class="btn btn-back" id="backBtn">Zur Startseite</button>
+            <h3>${state.index+1}/${state.fragen.length}</h3>
+            <h3>${state.modus==="dienst"?"Welcher Dienstgrad ist das?":"Welche Armatur ist das?"}</h3>
+            <img src="${f.bild}" class="quiz-img">
+            <div id="answers"></div>
+            <button class="btn btn-next" id="mainBtn">Bestätigen</button>
+        </div>
+    </div>`);
 
-        <button class="btn btn-back" onclick="start()">Zur Startseite</button>
+    document.getElementById("backBtn").onclick = start;
 
-        <h3>${index+1}/${fragen.length}</h3>
-        <h3>${modus==="dienst" ? "Welcher Dienstgrad ist das?" : "Welche Armatur ist das?"}</h3>
+    const answersDiv=document.getElementById("answers");
 
-        <img src="${f.bild}" class="quiz-img">
+    state.currentAnswers.forEach((a,i)=>{
+        const el=document.createElement("div");
+        el.className="answer";
+        el.textContent=a;
 
-        ${antworten.map((a,i)=>`
-            <div class="answer" onclick="toggleBild(${i},this)">
-                ${a}
-            </div>
-        `).join("")}
+        el.addEventListener("click", ()=>{
+            if(state.beantwortet) return;
 
-        <button class="btn btn-next" id="ok" onclick="checkBild()" disabled>Bestätigen</button>
-        <button class="btn btn-next" id="next" onclick="next()" style="display:none;">Weiter</button>
+            document.querySelectorAll(".answer").forEach(a=>a.classList.remove("selected"));
+            state.auswahl=[i];
+            el.classList.add("selected");
+        });
 
-    </div>
-    </div>`;
+        answersDiv.appendChild(el);
+    });
+
+    document.getElementById("mainBtn").onclick = handleButtonBild;
 }
 
-function toggleBild(i,el){
-    if(beantwortet) return;
-
-    document.querySelectorAll(".answer").forEach(a=>a.classList.remove("selected"));
-    auswahl=[i];
-    el.classList.add("selected");
-
-    document.getElementById("ok").disabled=false;
+function handleButtonBild(){
+    if(!state.beantwortet){
+        checkBild();
+        document.getElementById("mainBtn").innerText="Weiter";
+    }else{
+        next();
+    }
 }
 
 function checkBild(){
-    beantwortet=true;
-    let f=fragen[index];
+    state.beantwortet=true;
+    let f=state.fragen[state.index];
 
     document.querySelectorAll(".answer").forEach((el,i)=>{
-        if(currentAnswers[i]===f.name) el.classList.add("correct");
-        if(auswahl.includes(i) && currentAnswers[i]!==f.name){
-            el.classList.add("wrong");
-        }
+        if(state.currentAnswers[i]===f.name) el.classList.add("correct");
+        if(state.auswahl.includes(i) && state.currentAnswers[i]!==f.name) el.classList.add("wrong");
     });
 
-    if(currentAnswers[auswahl[0]]===f.name) punkte++;
+    if(state.auswahl.length && state.currentAnswers[state.auswahl[0]]===f.name){
+        state.punkte++;
+    }
 
-    let box=document.createElement("div");
-    box.className="quiz-box";
-    box.style.marginTop="10px";
-    box.innerHTML=`<h4>Erklärung</h4><p>${f.erklaerung}</p>`;
-    document.querySelector(".content").appendChild(box);
-
-    document.getElementById("ok").style.display="none";
-    document.getElementById("next").style.display="block";
+    if(state.modus!=="dienst"){
+        document.querySelector(".content").insertAdjacentHTML("beforeend",
+            `<div class="quiz-box" style="margin-top:10px">
+                <h4>Erklärung</h4><p>${f.erklaerung}</p>
+            </div>`);
+    }
 }
 
-/* ================= NEXT ================= */
+/* NEXT */
 
 function next(){
-    index++;
-    if(index>=fragen.length){
-        document.getElementById("app").innerHTML=`
+    state.index++;
+
+    if(state.index>=state.fragen.length){
+        render(`
         <div class="content">
-        <div class="quiz-box">
-            <h2>Ergebnis</h2>
-            <p>${punkte} / ${fragen.length}</p>
-            <button class="btn btn-next" onclick="start()">Zur Startseite</button>
-        </div>
-        </div>`;
+            <div class="quiz-box">
+                <h2>Ergebnis</h2>
+                <p>${state.punkte} / ${state.fragen.length}</p>
+                <button class="btn btn-next" id="restart">Zur Startseite</button>
+            </div>
+        </div>`);
+
+        document.getElementById("restart").onclick = start;
     } else {
-        if(modus==="theorie" || modus==="armaturen") showQuiz();
-        else showBild();
+        if(state.modus==="theorie"||state.modus==="armaturen"){
+            showQuiz();
+        } else {
+            showBild();
+        }
+    }
+}
+
+/* KNOTEN */
+
+let knotenIndex=0,knotenStep=0;
+
+function startKnoten(){
+    render(`<div class="content">
+        <button class="btn btn-back" id="backBtn">Zur Startseite</button>
+        <div id="knotenList"></div>
+    </div>`);
+
+    document.getElementById("backBtn").onclick=start;
+
+    const list=document.getElementById("knotenList");
+
+    knoten.forEach((k,i)=>{
+        const el=document.createElement("div");
+        el.className="card";
+        el.innerHTML=`<b>${k.name}</b>`;
+        el.onclick=()=>showKnoten(i);
+        list.appendChild(el);
+    });
+}
+
+function showKnoten(i){
+    knotenIndex=i;
+    knotenStep=0;
+    renderKnoten();
+}
+
+function renderKnoten(){
+    let k=knoten[knotenIndex];
+
+    render(`
+    <div class="content">
+        <div class="quiz-box">
+            <button class="btn btn-back" id="backBtn">Zurück</button>
+            <h2>${k.name}</h2>
+            <h4>Schritt ${knotenStep+1} von ${k.bilder.length}</h4>
+            <img src="${k.bilder[knotenStep]}" class="knoten-img">
+            <button class="btn btn-next" id="nextBtn">
+                ${knotenStep===k.bilder.length-1?"Erklärung anzeigen":"Weiter"}
+            </button>
+        </div>
+    </div>`);
+
+    document.getElementById("backBtn").onclick=startKnoten;
+    document.getElementById("nextBtn").onclick=nextKnoten;
+}
+
+function nextKnoten(){
+    let k=knoten[knotenIndex];
+
+    if(knotenStep<k.bilder.length-1){
+        knotenStep++;
+        renderKnoten();
+    }else{
+        render(`
+        <div class="content">
+            <div class="quiz-box">
+                <button class="btn btn-back" id="backBtn">Zurück</button>
+                <h2>${k.name}</h2>
+                <p>${k.erklaerung}</p>
+                <button class="btn btn-next" id="again">Nochmal</button>
+            </div>
+        </div>`);
+
+        document.getElementById("backBtn").onclick=startKnoten;
+        document.getElementById("again").onclick=()=>showKnoten(knotenIndex);
     }
 }
 
