@@ -37,6 +37,10 @@
 
 <script>
 
+/* ===========================================================
+   ✅ STATE
+   =========================================================== */
+
 const state={
     modus:"",
     fragen:[],
@@ -67,27 +71,53 @@ const brandTexte={
     F:"Fette / Öle"
 };
 
+/* ===========================================================
+   ✅ HILFSFUNKTIONEN
+   =========================================================== */
+
 const render = html => document.getElementById("app").innerHTML = html;
-const shuffle = arr => arr.sort(()=>Math.random()-0.5);
+
+const normalize = s => String(s).trim().toLowerCase();
+
+function shuffle(arr){
+    for(let i = arr.length - 1; i > 0; i--){
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
 
 const load = async file => {
     try{
-        const r=await fetch(file);
+        const r = await fetch(file);
+        if(!r.ok) throw new Error(file + " fehlt!");
         return await r.json();
-    }catch{
+    }catch(e){
+        console.error("Ladefehler:", e);
         return [];
     }
 };
 
-const reset = ()=>{
+function fixQuestionFormat(f){
+    if(!Array.isArray(f.richtig)){
+        if(Number.isInteger(f.richtig)) f.richtig=[f.richtig];
+        else f.richtig=[];
+    }
+    return f;
+}
+
+const reset = () => {
     state.index=0;
     state.punkte=0;
 };
 
-/* ---------- START ---------- */
+
+/* ===========================================================
+   ✅ STARTSCREEN
+   =========================================================== */
 
 async function start(){
-    daten.fragen = await load("fragen.json");
+    daten.fragen = (await load("fragen.json")).map(fixQuestionFormat);
     daten.dienstgrade = await load("dienstgrade.json");
     daten.armaturen = await load("armaturen.json");
     daten.bilder = await load("armaturen_bilder.json");
@@ -95,28 +125,32 @@ async function start(){
     daten.brand = await load("brandklassen_bilder.json");
 
     render(`
-    <div class="header"><img src="banner.png"></div>
-    <div class="content" id="menu"></div>`);
+        <div class="header">banner.png</div>
+        <div class="content" id="menu"></div>
+    `);
 
     const m=document.getElementById("menu");
 
-    const addCard = (img,t,count,fn)=>{
+    function addCard(img,t,count,fn){
         const el=document.createElement("div");
         el.className="card";
-        el.innerHTML=`<img src="${img}"><div><b>${t}</b><br>${count}</div>`;
+        el.innerHTML=`${img}<div><b>${t}</b><br>${count}</div>`;
         el.onclick=fn;
         m.appendChild(el);
-    };
+    }
 
-    addCard("dienstgrade.png","Dienstgrade",daten.dienstgrade.length,()=>startQuiz("dienst",daten.dienstgrade,true));
-    addCard("theorie.png","Theorie",daten.fragen.length,()=>startQuiz("theorie",daten.fragen));
-    addCard("armaturen.png","Armaturen Theorie",daten.armaturen.length,()=>startQuiz("armaturen",daten.armaturen));
-    addCard("armatur_erkennen.png","Armaturen erkennen",daten.bilder.length,()=>startQuiz("bild",daten.bilder,true));
+    addCard("dienstgrade.png","Dienstgrade",daten.dienstgrade.length,() => startQuiz("dienst",daten.dienstgrade,true));
+    addCard("theorie.png","Theorie",daten.fragen.length,() => startQuiz("theorie",daten.fragen));
+    addCard("armaturen.png","Armaturen Theorie",daten.armaturen.length,() => startQuiz("armaturen",daten.armaturen));
+    addCard("armatur_erkennen.png","Armaturen erkennen",daten.bilder.length,() => startQuiz("bild",daten.bilder,true));
     addCard("knoten.png","Knoten",daten.knoten.length,startKnoten);
     addCard("brandklassen.png","Brandklassen",daten.brand.length,startBrand);
 }
 
-/* ---------- QUIZ ---------- */
+
+/* ===========================================================
+   ✅ QUIZ
+   =========================================================== */
 
 function startQuiz(modus,data,isBild=false){
     state.modus=modus;
@@ -133,7 +167,7 @@ function showQuestion(){
     const f=state.fragen[state.index];
 
     if(state.isBild){
-        let pool = state.fragen.filter(x=>x.name!==f.name).map(x=>x.name);
+        let pool = state.fragen.filter(x => x.name!==f.name).map(x => x.name);
         let answers = shuffle(pool).slice(0,3);
         answers.push(f.name);
         state.currentAnswers = shuffle(answers);
@@ -141,16 +175,22 @@ function showQuestion(){
         state.currentAnswers = shuffle(f.antworten.map((a,i)=>({text:a,index:i})));
     }
 
+    if(!state.currentAnswers || state.currentAnswers.length===0){
+        render(`<div class="content"><div class="quiz-box"><h2>Fehler</h2><p>Keine Antworten vorhanden.</p></div></div>`);
+        return;
+    }
+
     render(`
-    <div class="content">
-    <div class="quiz-box">
-        <button class="btn btn-back" onclick="start()">Zurück</button>
-        <h3>${state.index+1}/${state.fragen.length}</h3>
-        ${state.isBild ? `<img src="${f.bild}" class="quiz-img">` : `<h3>${f.frage}</h3>`}
-        <div id="answers"></div>
-        <button class="btn btn-next" id="mainBtn">Bestätigen</button>
-    </div>
-    </div>`);
+        <div class="content">
+        <div class="quiz-box">
+            <button class="btn btn-back" onclick="start()">Zurück</button>
+            <h3>${state.index+1}/${state.fragen.length}</h3>
+            ${state.isBild ? `${f.bild}` : `<h3>${f.frage}</h3>`}
+            <div id="answers"></div>
+            <button class="btn btn-next" id="mainBtn">Bestätigen</button>
+        </div>
+        </div>
+    `);
 
     const container=document.getElementById("answers");
 
@@ -165,19 +205,17 @@ function showQuestion(){
     document.getElementById("mainBtn").onclick=handleSubmit;
 }
 
-/* ---------- LOGIK ---------- */
-
 function handleSelect(i,el){
-    if(state.beantwortet)return;
+    if(state.beantwortet) return;
 
     if(state.isBild){
-        document.querySelectorAll(".answer").forEach(a=>a.classList.remove("selected"));
+        document.querySelectorAll(".answer").forEach(a => a.classList.remove("selected"));
         state.auswahl=[i];
         el.classList.add("selected");
     } else {
         el.classList.toggle("selected");
         state.auswahl.includes(i)
-            ? state.auswahl=state.auswahl.filter(x=>x!==i)
+            ? state.auswahl = state.auswahl.filter(x => x!==i)
             : state.auswahl.push(i);
     }
 }
@@ -195,8 +233,8 @@ function handleSubmit(){
 
         document.querySelectorAll(".answer").forEach((el,i)=>{
             if(state.isBild){
-                if(state.currentAnswers[i]===f.name) el.classList.add("correct");
-                if(state.auswahl.includes(i) && state.currentAnswers[i]!==f.name) el.classList.add("wrong");
+                if(normalize(state.currentAnswers[i]) === normalize(f.name)) el.classList.add("correct");
+                if(state.auswahl.includes(i) && normalize(state.currentAnswers[i]) !== normalize(f.name)) el.classList.add("wrong");
             } else {
                 let orig = state.currentAnswers[i].index;
                 if(f.richtig.includes(orig)) el.classList.add("correct");
@@ -205,19 +243,18 @@ function handleSubmit(){
         });
 
         let korrekt = state.isBild
-            ? state.currentAnswers[state.auswahl[0]]===f.name
+            ? normalize(state.currentAnswers[state.auswahl[0]]) === normalize(f.name)
             : state.auswahl.length===f.richtig.length &&
-              state.auswahl.every(i=>f.richtig.includes(state.currentAnswers[i].index));
+              state.auswahl.every(i => f.richtig.includes(state.currentAnswers[i].index));
 
         if(korrekt) state.punkte++;
 
-        // ✅ ERKLÄRUNG
         if(f.erklaerung){
             document.querySelector(".content").insertAdjacentHTML("beforeend",
-            `<div class="quiz-box" style="margin-top:10px">
-            <h4>Erklärung</h4>
-            <p>${f.erklaerung}</p>
-            </div>`);
+                `<div class="quiz-box" style="margin-top:10px">
+                    <h4>Erklärung</h4>
+                    <p>${f.erklaerung}</p>
+                </div>`);
         }
 
         document.getElementById("mainBtn").innerText="Weiter";
@@ -225,7 +262,10 @@ function handleSubmit(){
     } else next();
 }
 
-/* ---------- BRAND ---------- */
+
+/* ===========================================================
+   ✅ BRANDKLASSEN
+   =========================================================== */
 
 function startBrand(){
     state.modus="brand";
@@ -239,43 +279,45 @@ function showBrand(){
     state.auswahl=[];
     state.beantwortet=false;
 
-    let f=state.fragen[state.index];
+    const f=state.fragen[state.index];
 
     let answers = phase===0
         ? shuffle(Object.entries(brandTexte).map(([k,v])=>({key:k,text:v})))
-        : shuffle([...f.loeschen,...f.falsch]);
+        : shuffle([...f.loeschen.map(x=>normalize(x)),...f.falsch.map(x=>normalize(x))]);
 
     state.currentAnswers=answers;
 
     render(`
-    <div class="content">
-    <div class="quiz-box">
-    <button class="btn btn-back" onclick="start()">Zurück</button>
-    <h3>${state.index+1}/${state.fragen.length}</h3>
-    <h3>${phase===0?"Welche Brandklasse?":"Wie löschen?"}</h3>
-    <img src="${f.bild}" class="quiz-img">
-    <div id="answers"></div>
-    <button class="btn btn-next" id="mainBtn">Bestätigen</button>
-    </div></div>`);
+        <div class="content">
+        <div class="quiz-box">
+            <button class="btn btn-back" onclick="start()">Zurück</button>
+            <h3>${state.index+1}/${state.fragen.length}</h3>
+            <h3>${phase===0?"Welche Brandklasse?":"Wie löschen?"}</h3>
+            ${f.bild}
+            <div id="answers"></div>
+            <button class="btn btn-next" id="mainBtn">Bestätigen</button>
+        </div></div>
+    `);
 
     const container=document.getElementById("answers");
 
     answers.forEach((a,i)=>{
         const el=document.createElement("div");
         el.className="answer";
+
         el.textContent = phase===0 ? a.text : a;
 
         el.onclick=()=>{
-            if(state.beantwortet)return;
+            if(state.beantwortet) return;
 
             if(phase===0){
-                document.querySelectorAll(".answer").forEach(a=>a.classList.remove("selected"));
+                document.querySelectorAll(".answer").forEach(a => a.classList.remove("selected"));
                 state.auswahl=[i];
                 el.classList.add("selected");
             } else {
                 el.classList.toggle("selected");
                 state.auswahl.includes(i)
-                    ? state.auswahl=state.auswahl.filter(x=>x!==i)
+                    ? state.auswahl=state.auswahl.filter(x => x!==i)
                     : state.auswahl.push(i);
             }
         };
@@ -293,28 +335,27 @@ function showBrand(){
             state.beantwortet=true;
 
             document.querySelectorAll(".answer").forEach((el,i)=>{
-                let val = phase===0 ? state.currentAnswers[i].key : state.currentAnswers[i];
+                let val = phase===0 ? state.currentAnswers[i].key : normalize(state.currentAnswers[i]);
 
-                if(phase===0 && val===f.name) el.classList.add("correct");
-                if(phase===1 && f.loeschen.includes(val)) el.classList.add("correct");
+                if(phase===0 && normalize(val)===normalize(f.name)) el.classList.add("correct");
+                if(phase===1 && f.loeschen.map(x=>normalize(x)).includes(val)) el.classList.add("correct");
 
                 if(state.auswahl.includes(i)){
-                    if(phase===0 && val!==f.name) el.classList.add("wrong");
-                    if(phase===1 && !f.loeschen.includes(val)) el.classList.add("wrong");
+                    if(phase===0 && normalize(val)!==normalize(f.name)) el.classList.add("wrong");
+                    if(phase===1 && !f.loeschen.map(x=>normalize(x)).includes(val)) el.classList.add("wrong");
                 }
             });
 
-            if(phase===0 && state.currentAnswers[state.auswahl[0]].key===f.name){
+            if(phase===0 && normalize(state.currentAnswers[state.auswahl[0]].key)===normalize(f.name)){
                 state.punkte++;
             }
 
-            // Erklärung bei Phase 0
             if(phase===0 && f.erklaerung){
                 document.querySelector(".content").insertAdjacentHTML("beforeend",
-                `<div class="quiz-box" style="margin-top:10px">
-                <h4>Erklärung</h4>
-                <p>${f.erklaerung}</p>
-                </div>`);
+                    `<div class="quiz-box" style="margin-top:10px">
+                        <h4>Erklärung</h4>
+                        <p>${f.erklaerung}</p>
+                    </div>`);
             }
 
             document.getElementById("mainBtn").innerText="Weiter";
@@ -326,7 +367,10 @@ function showBrand(){
     };
 }
 
-/* ---------- KNOTEN ---------- */
+
+/* ===========================================================
+   ✅ KNOTEN
+   =========================================================== */
 
 function startKnoten(){
     render(`<div class="content"><button class="btn btn-back" onclick="start()">Zurück</button><div id="list"></div></div>`);
@@ -346,14 +390,14 @@ function showKnoten(i,step){
     const k=daten.knoten[i];
 
     render(`
-    <div class="content"><div class="quiz-box">
-    <button class="btn btn-back" onclick="startKnoten()">Zurück</button>
-    <h2>${k.name}</h2>
-    <img src="${k.bilder[step]}" class="knoten-img">
-    <button class="btn btn-next" onclick="nextKnoten(${i},${step})">
-    ${step===k.bilder.length-1?"Erklärung":"Weiter"}
-    </button>
-    </div></div>`);
+        <div class="content"><div class="quiz-box">
+        <button class="btn btn-back" onclick="startKnoten()">Zurück</button>
+        <h2>${k.name}</h2>
+        <img src="${k.bilder[step]}" classclass="btn btn-next" onclick="nextKnoten(${i},${step})">
+        ${step===k.bilder.length-1?"Erklärung":"Weiter"}
+        </button>
+        </div></div>
+    `);
 }
 
 function nextKnoten(i,step){
@@ -363,26 +407,31 @@ function nextKnoten(i,step){
         showKnoten(i,step+1);
     } else {
         render(`
-        <div class="content"><div class="quiz-box">
-        <button class="btn btn-back" onclick="startKnoten()">Zurück</button>
-        <h2>${k.name}</h2>
-        <p>${k.erklaerung}</p>
-        </div></div>`);
+            <div class="content"><div class="quiz-box">
+            <button class="btn btn-back" onclick="startKnoten()">Zurück</button>
+            <h2>${k.name}</h2>
+            <p>${k.erklaerung}</p>
+            </div></div>
+        `);
     }
 }
 
-/* ---------- NEXT ---------- */
+
+/* ===========================================================
+   ✅ NEXT
+   =========================================================== */
 
 function next(){
     state.index++;
 
-    if(state.index>=state.fragen.length){
+    if(state.index >= state.fragen.length){
         render(`
-        <div class="content"><div class="quiz-box">
-        <h2>Ergebnis</h2>
-        <p>${state.punkte} / ${state.fragen.length}</p>
-        <button class="btn btn-next" onclick="start()">Start</button>
-        </div></div>`);
+            <div class="content"><div class="quiz-box">
+            <h2>Ergebnis</h2>
+            <p>${state.punkte} / ${state.fragen.length}</p>
+            <button class="btn btn-next" onclick="start()">Start</button>
+            </div></div>
+        `);
     } else {
         if(state.modus==="brand") showBrand();
         else showQuestion();
