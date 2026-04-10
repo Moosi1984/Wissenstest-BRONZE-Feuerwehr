@@ -1,0 +1,37 @@
+[
+  {
+    "name": "A",
+    "bild": "brandklasse_a.jpg",
+    "erklaerung": "Feste Stoffe wie Holz oder Papier.",
+    "loeschen": ["Wasser", "Schaum", "Pulver"],
+    "falsch": ["CO2"]
+  },
+  {
+    "name": "B",
+    "bild": "brandklasse_b.jpg",
+    "erklaerung": "Flüssige Stoffe wie Benzin.",
+    "loeschen": ["Schaum", "Pulver", "CO2"],
+    "falsch": ["Wasser"]
+  },
+  {
+    "name": "C",
+    "bild": "brandklasse_c.jpg",
+    "erklaerung": "Gase wie Propan.",
+    "loeschen": ["Pulver"],
+    "falsch": ["Wasser", "Schaum"]
+  },
+  {
+    "name": "D",
+    "bild": "brandklasse_d.jpg",
+    "erklaerung": "Metalle wie Magnesium.",
+    "loeschen": ["Metallbrandpulver"],
+    "falsch": ["Wasser", "Schaum", "CO2"]
+  },
+  {
+    "name": "F",
+    "bild": "brandklasse_f.jpg",
+    "erklaerung": "Fette und Öle.",
+    "loeschen": ["Fettbrandlöscher"],
+    "falsch": ["Wasser"]
+  }
+]

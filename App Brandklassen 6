@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wissenstest</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,sans-serif}
+
+.header{width:100%;height:140px}
+.header img{width:100%;height:100%;object-fit:cover}
+
+.content{background:#f2f2f2;padding:15px;min-height:100vh}
+
+.card{display:flex;align-items:center;background:white;border-radius:20px;padding:15px;margin-top:15px;box-shadow:0 4px 10px rgba(0,0,0,0.05);cursor:pointer}
+.card img{width:70px;height:70px;border-radius:16px;margin-right:15px}
+
+.quiz-box{background:white;border-radius:20px;padding:20px;box-shadow:0 4px 10px rgba(0,0,0,0.05)}
+
+.btn{width:100%;padding:15px;border:none;border-radius:14px;margin-top:10px;font-size:18px;font-weight:600;cursor:pointer}
+.btn-back{background:#555;color:white}
+.btn-next{background:linear-gradient(90deg,#ff3b3b,#ff9800);color:white}
+
+.answer{background:#eee;padding:14px;border-radius:12px;margin:6px 0;cursor:pointer}
+.correct{background:#4caf50!important;color:white}
+.wrong{background:#f44336!important;color:white}
+.selected{border:2px solid #ff3b3b}
+
+.quiz-img{width:160px;display:block;margin:15px auto}
+.knoten-img{width:100%;max-width:500px;display:block;margin:20px auto}
+</style>
+</head>
+
+<body>
+<div id="app">Lade...</div>
+
+<script>
+
+const state={
+    modus:"",
+    fragen:[],
+    index:0,
+    punkte:0,
+    auswahl:[],
+    beantwortet:false,
+    currentAnswers:[],
+    isBild:false
+};
+
+let daten={
+    fragen:[],
+    dienstgrade:[],
+    armaturen:[],
+    bilder:[],
+    knoten:[],
+    brand:[]
+};
+
+let phase=0;
+
+const brandTexte={
+    A:"Feste Stoffe",
+    B:"Flüssige Stoffe",
+    C:"Gase",
+    D:"Metalle",
+    F:"Fette / Öle"
+};
+
+const render = html => document.getElementById("app").innerHTML = html;
+const shuffle = arr => arr.sort(()=>Math.random()-0.5);
+
+const load = async file => {
+    try{
+        const r=await fetch(file);
+        return await r.json();
+    }catch{
+        return [];
+    }
+};
+
+const reset = ()=>{
+    state.index=0;
+    state.punkte=0;
+};
+
+/* ---------- START ---------- */
+
+async function start(){
+    daten.fragen = await load("fragen.json");
+    daten.dienstgrade = await load("dienstgrade.json");
+    daten.armaturen = await load("armaturen.json");
+    daten.bilder = await load("armaturen_bilder.json");
+    daten.knoten = await load("knoten.json");
+    daten.brand = await load("brandklassen_bilder.json");
+
+    render(`
+    <div class="header"><img src="banner.png"></div>
+    <div class="content" id="menu"></div>`);
+
+    const m=document.getElementById("menu");
+
+    const addCard = (img,t,count,fn)=>{
+        const el=document.createElement("div");
+        el.className="card";
+        el.innerHTML=`<img src="${img}"><div><b>${t}</b><br>${count}</div>`;
+        el.onclick=fn;
+        m.appendChild(el);
+    };
+
+    addCard("dienstgrade.png","Dienstgrade",daten.dienstgrade.length,()=>startQuiz("dienst",daten.dienstgrade,true));
+    addCard("theorie.png","Theorie",daten.fragen.length,()=>startQuiz("theorie",daten.fragen));
+    addCard("armaturen.png","Armaturen Theorie",daten.armaturen.length,()=>startQuiz("armaturen",daten.armaturen));
+    addCard("armatur_erkennen.png","Armaturen erkennen",daten.bilder.length,()=>startQuiz("bild",daten.bilder,true));
+    addCard("knoten.png","Knoten",daten.knoten.length,startKnoten);
+    addCard("brandklassen.png","Brandklassen",daten.brand.length,startBrand);
+}
+
+/* ---------- QUIZ ---------- */
+
+function startQuiz(modus,data,isBild=false){
+    state.modus=modus;
+    state.fragen=shuffle([...data]);
+    state.isBild=isBild;
+    reset();
+    showQuestion();
+}
+
+function showQuestion(){
+    state.auswahl=[];
+    state.beantwortet=false;
+
+    const f=state.fragen[state.index];
+
+    if(state.isBild){
+        let pool = state.fragen.filter(x=>x.name!==f.name).map(x=>x.name);
+        let answers = shuffle(pool).slice(0,3);
+        answers.push(f.name);
+        state.currentAnswers = shuffle(answers);
+    } else {
+        state.currentAnswers = shuffle(f.antworten.map((a,i)=>({text:a,index:i})));
+    }
+
+    render(`
+    <div class="content">
+    <div class="quiz-box">
+        <button class="btn btn-back" onclick="start()">Zurück</button>
+        <h3>${state.index+1}/${state.fragen.length}</h3>
+        ${state.isBild ? `<img src="${f.bild}" class="quiz-img">` : `<h3>${f.frage}</h3>`}
+        <div id="answers"></div>
+        <button class="btn btn-next" id="mainBtn">Bestätigen</button>
+    </div>
+    </div>`);
+
+    const container=document.getElementById("answers");
+
+    state.currentAnswers.forEach((a,i)=>{
+        const el=document.createElement("div");
+        el.className="answer";
+        el.textContent = state.isBild ? a : a.text;
+        el.onclick=()=>handleSelect(i,el);
+        container.appendChild(el);
+    });
+
+    document.getElementById("mainBtn").onclick=handleSubmit;
+}
+
+/* ---------- LOGIK ---------- */
+
+function handleSelect(i,el){
+    if(state.beantwortet)return;
+
+    if(state.isBild){
+        document.querySelectorAll(".answer").forEach(a=>a.classList.remove("selected"));
+        state.auswahl=[i];
+        el.classList.add("selected");
+    } else {
+        el.classList.toggle("selected");
+        state.auswahl.includes(i)
+            ? state.auswahl=state.auswahl.filter(x=>x!==i)
+            : state.auswahl.push(i);
+    }
+}
+
+function handleSubmit(){
+    if(!state.beantwortet && state.auswahl.length===0){
+        alert("Bitte wählen!");
+        return;
+    }
+
+    const f=state.fragen[state.index];
+
+    if(!state.beantwortet){
+        state.beantwortet=true;
+
+        document.querySelectorAll(".answer").forEach((el,i)=>{
+            if(state.isBild){
+                if(state.currentAnswers[i]===f.name) el.classList.add("correct");
+                if(state.auswahl.includes(i) && state.currentAnswers[i]!==f.name) el.classList.add("wrong");
+            } else {
+                let orig = state.currentAnswers[i].index;
+                if(f.richtig.includes(orig)) el.classList.add("correct");
+                if(state.auswahl.includes(i) && !f.richtig.includes(orig)) el.classList.add("wrong");
+            }
+        });
+
+        let korrekt = state.isBild
+            ? state.currentAnswers[state.auswahl[0]]===f.name
+            : state.auswahl.length===f.richtig.length &&
+              state.auswahl.every(i=>f.richtig.includes(state.currentAnswers[i].index));
+
+        if(korrekt) state.punkte++;
+
+        // ✅ ERKLÄRUNG
+        if(f.erklaerung){
+            document.querySelector(".content").insertAdjacentHTML("beforeend",
+            `<div class="quiz-box" style="margin-top:10px">
+            <h4>Erklärung</h4>
+            <p>${f.erklaerung}</p>
+            </div>`);
+        }
+
+        document.getElementById("mainBtn").innerText="Weiter";
+
+    } else next();
+}
+
+/* ---------- BRAND ---------- */
+
+function startBrand(){
+    state.modus="brand";
+    state.fragen=shuffle([...daten.brand]);
+    reset();
+    phase=0;
+    showBrand();
+}
+
+function showBrand(){
+    state.auswahl=[];
+    state.beantwortet=false;
+
+    let f=state.fragen[state.index];
+
+    let answers = phase===0
+        ? shuffle(Object.entries(brandTexte).map(([k,v])=>({key:k,text:v})))
+        : shuffle([...f.loeschen,...f.falsch]);
+
+    state.currentAnswers=answers;
+
+    render(`
+    <div class="content">
+    <div class="quiz-box">
+    <button class="btn btn-back" onclick="start()">Zurück</button>
+    <h3>${state.index+1}/${state.fragen.length}</h3>
+    <h3>${phase===0?"Welche Brandklasse?":"Wie löschen?"}</h3>
+    <img src="${f.bild}" class="quiz-img">
+    <div id="answers"></div>
+    <button class="btn btn-next" id="mainBtn">Bestätigen</button>
+    </div></div>`);
+
+    const container=document.getElementById("answers");
+
+    answers.forEach((a,i)=>{
+        const el=document.createElement("div");
+        el.className="answer";
+        el.textContent = phase===0 ? a.text : a;
+
+        el.onclick=()=>{
+            if(state.beantwortet)return;
+
+            if(phase===0){
+                document.querySelectorAll(".answer").forEach(a=>a.classList.remove("selected"));
+                state.auswahl=[i];
+                el.classList.add("selected");
+            } else {
+                el.classList.toggle("selected");
+                state.auswahl.includes(i)
+                    ? state.auswahl=state.auswahl.filter(x=>x!==i)
+                    : state.auswahl.push(i);
+            }
+        };
+
+        container.appendChild(el);
+    });
+
+    document.getElementById("mainBtn").onclick=()=>{
+        if(!state.beantwortet && state.auswahl.length===0){
+            alert("Bitte wählen!");
+            return;
+        }
+
+        if(!state.beantwortet){
+            state.beantwortet=true;
+
+            document.querySelectorAll(".answer").forEach((el,i)=>{
+                let val = phase===0 ? state.currentAnswers[i].key : state.currentAnswers[i];
+
+                if(phase===0 && val===f.name) el.classList.add("correct");
+                if(phase===1 && f.loeschen.includes(val)) el.classList.add("correct");
+
+                if(state.auswahl.includes(i)){
+                    if(phase===0 && val!==f.name) el.classList.add("wrong");
+                    if(phase===1 && !f.loeschen.includes(val)) el.classList.add("wrong");
+                }
+            });
+
+            if(phase===0 && state.currentAnswers[state.auswahl[0]].key===f.name){
+                state.punkte++;
+            }
+
+            // Erklärung bei Phase 0
+            if(phase===0 && f.erklaerung){
+                document.querySelector(".content").insertAdjacentHTML("beforeend",
+                `<div class="quiz-box" style="margin-top:10px">
+                <h4>Erklärung</h4>
+                <p>${f.erklaerung}</p>
+                </div>`);
+            }
+
+            document.getElementById("mainBtn").innerText="Weiter";
+
+        } else {
+            if(phase===0){phase=1;showBrand();}
+            else{phase=0;next();}
+        }
+    };
+}
+
+/* ---------- KNOTEN ---------- */
+
+function startKnoten(){
+    render(`<div class="content"><button class="btn btn-back" onclick="start()">Zurück</button><div id="list"></div></div>`);
+
+    const l=document.getElementById("list");
+
+    daten.knoten.forEach((k,i)=>{
+        const el=document.createElement("div");
+        el.className="card";
+        el.innerHTML=`<b>${k.name}</b>`;
+        el.onclick=()=>showKnoten(i,0);
+        l.appendChild(el);
+    });
+}
+
+function showKnoten(i,step){
+    const k=daten.knoten[i];
+
+    render(`
+    <div class="content"><div class="quiz-box">
+    <button class="btn btn-back" onclick="startKnoten()">Zurück</button>
+    <h2>${k.name}</h2>
+    <img src="${k.bilder[step]}" class="knoten-img">
+    <button class="btn btn-next" onclick="nextKnoten(${i},${step})">
+    ${step===k.bilder.length-1?"Erklärung":"Weiter"}
+    </button>
+    </div></div>`);
+}
+
+function nextKnoten(i,step){
+    const k=daten.knoten[i];
+
+    if(step < k.bilder.length-1){
+        showKnoten(i,step+1);
+    } else {
+        render(`
+        <div class="content"><div class="quiz-box">
+        <button class="btn btn-back" onclick="startKnoten()">Zurück</button>
+        <h2>${k.name}</h2>
+        <p>${k.erklaerung}</p>
+        </div></div>`);
+    }
+}
+
+/* ---------- NEXT ---------- */
+
+function next(){
+    state.index++;
+
+    if(state.index>=state.fragen.length){
+        render(`
+        <div class="content"><div class="quiz-box">
+        <h2>Ergebnis</h2>
+        <p>${state.punkte} / ${state.fragen.length}</p>
+        <button class="btn btn-next" onclick="start()">Start</button>
+        </div></div>`);
+    } else {
+        if(state.modus==="brand") showBrand();
+        else showQuestion();
+    }
+}
+
+start();
+
+</script>
+</body>
+</html>
